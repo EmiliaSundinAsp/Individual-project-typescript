@@ -17,5 +17,11 @@ export default class Board {
     this.isADraw = false;
     this.gameOver = false;
   }
+
+  // Function to render board
+  // TODO: Make a more customized board, if time allows
+  renderBoard() {
+    console.table(this.matrix);
+  }
 }
 
