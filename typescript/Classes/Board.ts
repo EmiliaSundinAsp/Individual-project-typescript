@@ -18,10 +18,11 @@ export default class Board {
     this.gameOver = false;
   }
 
-  // Function to render board
-  // TODO: Make a more customized board, if time allows
+  // Function to render board in console
   renderBoard() {
-    console.table(this.matrix);
+    let line = '/n' + '-'.repeat(29) + '/n';
+    console.log(
+      line + this.matrix.map(row => row.map(column => `| ${column} `).join('') + '|').join(line) + line);
   }
 }
 
