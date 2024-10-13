@@ -5,62 +5,74 @@ import Player from './Player.js';
 export default class App {
 
   board: Board;
-  playerX: Player;
-  playerO: Player;
+  playerX!: Player;
+  playerO!: Player;
 
 
   constructor() {
-    // Loop to play the game
+    // Game loop
     while (true) {
+      this.board = new Board(); // Initialize the board first
       this.createPlayers();
-      console.log('Player created')
-      this.board = new Board;
+      console.log('Players created');
       this.startGameLoop();
       this.whoHasWonOnGameOver();
-      let playAgain = prompt('Play again? (yes/no) ')
-      if (playAgain !== 'yes') { break; }
+      let playAgain = prompt('Play again? (yes/no) ');
+      if (playAgain.toLowerCase() !== 'yes') {
+        break;
+      }
     }
   }
 
   // Function to create players
   createPlayers(): void {
-    console.log('Connect Four/n');
+    console.log('Connect Four\n');
     let opponentType = prompt('Two players or player VS computer? (two/computer)');
     this.playerX = new Player(prompt('Player X name: '), 'X', this.board);
-    if (opponentType === 'computer') {
-      this.playerO = new Player('Computer,', 'O', this.board, true)
+
+    if (opponentType.toLowerCase() === 'computer') {
+      this.playerO = new Player('Computer', 'O', this.board, true);
     } else {
       this.playerO = new Player(prompt('Player O name: '), 'O', this.board);
     }
-}
+  }
 
   // Function to start game loop
   startGameLoop(): void {
-    if (!this.board.gameOver) {
+    while (!this.board.gameOver) { // Ensure game loop continues until the game is over
       this.board.renderBoard();
       let player = this.board.currentPlayer === 'X' ? this.playerX : this.playerO;
+
       if (player.isComputer) {
         console.log('Computer move');
         let validMove = false;
         let column: number = -1;
         while (!validMove) {
-          column = Math.floor(Math.random() * 6);
+          column = Math.floor(Math.random() * 7); // Assuming 7 columns in Connect Four
           if (this.board.matrix[0][column] === ' ') {
             validMove = true;
-            console.log('Player color' + player.color + ", Column: " + (column + 1));
+            console.log(`Player ${player.color} (Computer), Column: ${column + 1}`);
           }
         }
         this.board.makeMove(player.color, column);
-        console.log('Computer makes move in column: ' + (column + 1));
-        this.startGameLoop();
+        console.log(`Computer makes move in column: ${column + 1}`);
+      } else {
+        let validMove = false;
+        while (!validMove) {
+          let move = prompt(`Make your move ${player.color} (${player.name}) - enter column (1-7):`);
+          let column = parseInt(move) - 1;
+          if (!isNaN(column) && column >= 0 && column < 7 && this.board.matrix[0][column] === ' ') {
+            validMove = true;
+            this.board.makeMove(player.color, column);
+          } else {
+            console.log('Invalid move. Try again.');
+          }
+        }
       }
 
-      else {
-        console.log('Player move')
-        let move = prompt("Make your move " + player.color + " " + player.name + " - enter column:");
-        let [column] = move.split(',').map((x: string) => +x.trim() - 1);
-        this.board.makeMove(player.color, column,);
-        this.startGameLoop();
+      // Check for game over after each move
+      if (this.board.gameOver) {
+        break;
       }
     }
   }

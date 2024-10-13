@@ -25,7 +25,7 @@ export default class Board {
       line + this.matrix.map(row => row.map(column => `| ${column} `).join('') + '|').join(line) + line);
   }
 
-  makeMove(color: 'X' | 'O', column: number): boolean {
+  makeMove(color: string, column: number): boolean {
     // don't make any move if the game is over
     if (this.gameOver) { return false; }
     // check that the color is X or O - otherwise don't make the move
