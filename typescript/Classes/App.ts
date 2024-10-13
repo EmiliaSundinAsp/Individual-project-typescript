@@ -22,6 +22,7 @@ export default class App {
     }
   }
 
+  // Function to create players
   createPlayers(): void {
     console.log('Connect Four/n');
     let opponentType = prompt('Two players or player VS computer? (two/computer)');
@@ -33,6 +34,7 @@ export default class App {
     }
 }
 
+  // Function to start game loop
   startGameLoop(): void {
     if (!this.board.gameOver) {
       this.board.renderBoard();
@@ -63,5 +65,15 @@ export default class App {
     }
   }
 
-
+  // Function to determine winner or a draw
+  whoHasWonOnGameOver(): void {
+    this.board.renderBoard();
+    if (this.board.winner) {
+      let winningPlayer = (this.board.winner === 'X' ? this.playerX : this.playerO);
+      console.log('Congratulations ' + winningPlayer.color + ": " + winningPlayer.name + ' you won!');
+    }
+    else {
+      console.log('Unfortunately, the game was a draw!')
+    }
+  }
 }
