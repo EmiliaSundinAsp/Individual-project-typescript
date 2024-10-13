@@ -2,8 +2,8 @@ export default class Board {
 
   // Type declarations
   matrix: string[][]; // A two-dimensional array
-  currentPlayer: 'X' | 'O';
-  winner: 'X' | 'O' | false;
+  currentPlayer: string;
+  winner: string | boolean;
   isADraw: boolean;
   gameOver: boolean;
 
