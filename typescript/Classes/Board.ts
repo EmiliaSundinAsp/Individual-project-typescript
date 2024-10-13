@@ -25,7 +25,7 @@ export default class Board {
       line + this.matrix.map(row => row.map(column => `| ${column} `).join('') + '|').join(line) + line);
   }
 
-  makeMove(color: 'X' | 'O',  column: number): boolean{
+  makeMove(color: 'X' | 'O', column: number): boolean {
     // don't make any move if the game is over
     if (this.gameOver) { return false; }
     // check that the color is X or O - otherwise don't make the move
@@ -37,12 +37,12 @@ export default class Board {
     // check that the column is between 0 and matrix[0] - otherwise don't make the move
     if (column < 0 || column >= this.matrix[0].length) { return false; }
     // check that the position is empty - otherwise don't make the move
-        let row = -1;
+    let row = -1;
     for (let r = this.matrix.length - 1; r >= 0; r--) {
-        if (this.matrix[r][column] === ' ') {
-            row = r;
-            break;
-        }
+      if (this.matrix[r][column] === ' ') {
+        row = r;
+        break;
+      }
     }
     // If no empty row is found, the column is full
     if (row === -1) { return false; }
@@ -60,16 +60,44 @@ export default class Board {
     return true;
   }
 
-// PLACE HOLDERS
+  // Win checking function
+  winCheck(): string | false {
+    let m = this.matrix;
+    // Iterate over player 'X' and 'O' to check is they won
+    for (let color of 'XO') {
+      // Check for possible wins
+      let offsets = [
+        [[0, 0], [0, 1], [0, 2], [0, 3]],  // Horizontal
+        [[0, 0], [1, 0], [2, 0], [3, 0]],  // Vertical
+        [[0, 0], [1, 1], [2, 2], [3, 3]],  // Diagonal win (top-left to bottom-right)
+        [[0, 0], [1, -1], [2, -2], [3, -3]] // Diagonal win (bottom-left to top-right)
+      ];
 
-// Placeholder win checking function
-  winCheck(): 'X' | 'O' | false {
-    // Implement win checking logic
-    return false;
+      // Loop over each position on the board/matrix
+      for (let r = 0; r < m[0].length; r++) {
+        for (let c = 0; c < m[0].length; c++) {
+
+          // Check every possible win type
+          for (let winType of offsets) {
+            let colorsInCombo = '';
+
+            // Collect colors of the cells in thge win pattern
+            for (let [ro, co] of winType) {
+              colorsInCombo += (m[r + ro] || [])[c + co];
+            }
+            // Return the winning color if four consecutive cells match
+            if (colorsInCombo === color.repeat(4)) {
+              return color;
+            }
+          }
+        }
+      }
+    }
+    return false; // No winner was found
   }
 
-  // Placeholder draw checking function
+  // Check if game was a draw
   drawCheck(): boolean {
-    // Implement draw checking logic
-    return false;
+    return !this.winCheck() && !this.matrix.flat().includes(' ');
   }
+}
