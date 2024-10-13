@@ -33,6 +33,35 @@ export default class App {
     }
 }
 
+  startGameLoop(): void {
+    if (!this.board.gameOver) {
+      this.board.renderBoard();
+      let player = this.board.currentPlayer === 'X' ? this.playerX : this.playerO;
+      if (player.isComputer) {
+        console.log('Computer move');
+        let validMove = false;
+        let column: number = -1;
+        while (!validMove) {
+          column = Math.floor(Math.random() * 6);
+          if (this.board.matrix[0][column] === ' ') {
+            validMove = true;
+            console.log('Player color' + player.color + ", Column: " + (column + 1));
+          }
+        }
+        this.board.makeMove(player.color, column);
+        console.log('Computer makes move in column: ' + (column + 1));
+        this.startGameLoop();
+      }
+
+      else {
+        console.log('Player move')
+        let move = prompt("Make your move " + player.color + " " + player.name + " - enter column:");
+        let [column] = move.split(',').map((x: string) => +x.trim() - 1);
+        this.board.makeMove(player.color, column,);
+        this.startGameLoop();
+      }
+    }
+  }
 
 
 }
