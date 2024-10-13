@@ -21,4 +21,18 @@ export default class App {
       if (playAgain !== 'yes') { break; }
     }
   }
+
+  createPlayers(): void {
+    console.log('Connect Four/n');
+    let opponentType = prompt('Two players or player VS computer? (two/computer)');
+    this.playerX = new Player(prompt('Player X name: '), 'X', this.board);
+    if (opponentType === 'computer') {
+      this.playerO = new Player('Computer,', 'O', this.board, true)
+    } else {
+      this.playerO = new Player(prompt('Player O name: '), 'O', this.board);
+    }
+}
+
+
+
 }
